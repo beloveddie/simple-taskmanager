@@ -1,5 +1,4 @@
 const express = require("express");
-const router = express.Router();
 const path = require("path");
 const cors = require("cors");
 
@@ -14,9 +13,8 @@ app.use(cors());
 // built-in middleware for json
 app.use(express.json());
 
-app.get("^/$|/index(.html)?", (req, res) => {
-  res.sendFile(path.join(__dirname, "views", "index.html"));
-});
+// routes
+app.use("/", require("./routes/root"));
 
 app.all("*", (req, res) => {
   res.status(404);
