@@ -70,3 +70,13 @@ const deleteTask = (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+const getTaskById = (req, res) => {
+    const id = (req.body.id);
+    if (!id || tasksDB.tasks.find(task => task.id === id)) {
+        return res.status(400).json({messgae: `No task with ${id} not found!`})
+    }
+    const task = tasksDB.tasks.find(task => task.id === id);
+    res.status(200).json({ task });
+    console.log(task);
+}
