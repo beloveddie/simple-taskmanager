@@ -15,6 +15,7 @@ app.use(express.json());
 
 // routes
 app.use("/", require("./routes/root"));
+app.use("/task(-)?manager", require("./routes/tasksManager"));
 
 app.all("*", (req, res) => {
   res.status(404);
