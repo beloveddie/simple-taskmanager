@@ -75,7 +75,6 @@ const deleteTask = async (req, res) => {
     await writeFile(tasksDB.tasks);
     const deletedTask = newTasks.find((task) => task.id === id);
     res.status(200).json({ message: "Task succesfully deleted", deletedTask });
-    console.log(deletedTask);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
