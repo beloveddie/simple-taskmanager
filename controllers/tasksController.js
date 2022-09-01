@@ -56,7 +56,7 @@ const updateTask = async (req, res) => {
       JSON.stringify(tasksDB.tasks)
     );
     res.status(200).json({ message: "Task succesfully updated", updatedTask });
-    console.log(updateTask);
+    console.log(updatedTask);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
