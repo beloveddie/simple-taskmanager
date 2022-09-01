@@ -51,7 +51,7 @@ const updateTask = async (req, res) => {
     });
     tasksDB.setTasks(newTasks);
     const updatedTask = newTasks.find((task) => task.id === id);
-    await fsPromises.appendFile(
+    await fsPromises.writeFile(
       path.join(__dirname, "..", "model", "tasks.json"),
       JSON.stringify(tasksDB.tasks)
     );
