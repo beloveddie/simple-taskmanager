@@ -1,12 +1,12 @@
-const fsPromises = require("fs/promises");
 const { v4: uuid } = require("uuid");
-const path = require("path");
 const tasksDB = {
   tasks: require("../model/tasks.json"),
   setTasks(tasks) {
     this.tasks = tasks;
   },
 };
+const validator = require("../utils/validator");
+const writeFile = require("../utils/writeFile");
 
 const getAllTasks = (req, res) => {
   res.json(tasksDB.tasks);
@@ -32,10 +32,7 @@ const addTask = async (req, res) => {
   tasksDB.setTasks([...tasksDB.tasks, newTask]);
   // lets play bit with the filesystem ..yoh!
   try {
-    await fsPromises.writeFile(
-      path.join(__dirname, "..", "model", "tasks.json"),
-      JSON.stringify(tasksDB.tasks)
-    );
+    await writeFile(tasksDB.tasks);
     console.log(tasksDB.tasks);
     res.status(201).json({ success: "Task successfully added!" });
   } catch (error) {
@@ -45,7 +42,7 @@ const addTask = async (req, res) => {
 
 const updateTask = async (req, res) => {
   const id = req.body.id;
-  if (!id || !tasksDB.tasks.find((task) => task.id === id)) {
+  if (validator.exists(id, tasksDB.tasks)) {
     return res.status(400).json({ messgae: `No task with ${id} not found!` });
   }
   try {
@@ -59,10 +56,7 @@ const updateTask = async (req, res) => {
     });
     tasksDB.setTasks(newTasks);
     const updatedTask = newTasks.find((task) => task.id === id);
-    await fsPromises.writeFile(
-      path.join(__dirname, "..", "model", "tasks.json"),
-      JSON.stringify(tasksDB.tasks)
-    );
+    await writeFile(tasksDB.tasks);
     res.status(200).json({ message: "Task succesfully updated", updatedTask });
     console.log(updatedTask);
   } catch (error) {
@@ -72,16 +66,13 @@ const updateTask = async (req, res) => {
 
 const deleteTask = async (req, res) => {
   const id = req.body.id;
-  if (!id || !tasksDB.tasks.find((task) => task.id === id)) {
+  if (validator.exists(id, tasksDB.tasks)) {
     return res.status(400).json({ messgae: `No task with ${id} not found!` });
   }
   try {
     const newTasks = tasksDB.tasks.filter((task) => task.id !== id);
     tasksDB.setTasks(newTasks);
-    await fsPromises.writeFile(
-      path.join(__dirname, "..", "model", "tasks.json"),
-      JSON.stringify(tasksDB.tasks)
-    );
+    await writeFile(tasksDB.tasks);
     const deletedTask = newTasks.find((task) => task.id === id);
     res.status(200).json({ message: "Task succesfully deleted", deletedTask });
     console.log(deletedTask);
@@ -92,7 +83,7 @@ const deleteTask = async (req, res) => {
 
 const getTaskById = (req, res) => {
   const id = req.params.id;
-  if (!id || !tasksDB.tasks.find((task) => task.id === id)) {
+  if (validator.exists(id, tasksDB.tasks)) {
     return res.status(400).json({ messgae: `No task with ${id} not found!` });
   }
   const task = tasksDB.tasks.find((task) => task.id === id);
