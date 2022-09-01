@@ -80,3 +80,5 @@ const getTaskById = (req, res) => {
     res.status(200).json({ task });
     console.log(task);
 }
+
+module.exports = {getAllTasks, addTask, updateTask, getTaskById}
