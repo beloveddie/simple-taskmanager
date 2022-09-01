@@ -17,4 +17,7 @@ router
     res.json({ message: "DELETE coming soon!" });
   });
 
+router.get("/:id", (req, res) => {
+  res.json({ message: `GET by ID ${req.params.id} coming soon!` });
+});
 module.exports = router;
