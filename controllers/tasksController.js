@@ -1,5 +1,5 @@
 const fsPromises = require("fs/promises");
-const { nanoid } = require("nanoid");
+const { v4: uuid } = require("uuid");
 const path = require("path");
 const tasksDB = {
   tasks: require("../model/tasks.json"),
@@ -20,7 +20,7 @@ const addTask = async (req, res) => {
     });
   }
   // we can go ahead and create the task then
-  const newTask = { id: nanoid(), title, assignee, dueDate, difficulty };
+  const newTask = { id: uuid(), title, assignee, dueDate, difficulty };
   tasksDB.setTasks([...tasksDB.tasks, newTask]);
   // lets play bit with the filesystem ..yoh!
   try {
