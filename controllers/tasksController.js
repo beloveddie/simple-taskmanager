@@ -53,3 +53,20 @@ const updateTask = (req, res) => {
          res.status(500).json({ message: error.message });
     }
 }
+
+const deleteTask = (req, res) => {
+ const id = (req.body.id)
+    if (!id || tasksDB.tasks.find(task => task.id === id)) {
+        return res.status(400).json({messgae: `No task with ${id} not found!`})
+    }
+    try {
+        const newTasks = tasksDB.tasks.filter(task => task.id !== id)
+        tasksDB.setTasks(newTasks)
+        await fsPromises.appendFile(path.join(__dirname, "..", "model", "tasks.json"), JSON.stringify(tasksDB.tasks))
+        const deletedTask = newTasks.find(task => task.id === id);
+        res.status(200).json({ message: "Task succesfully deleted", deletedTask })
+        console.log(deletedTask)
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
