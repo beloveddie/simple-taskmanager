@@ -83,7 +83,7 @@ const deleteTask = async (req, res) => {
 };
 
 const getTaskById = (req, res) => {
-  const id = req.body.id;
+  const id = req.params.id;
   if (!id || tasksDB.tasks.find((task) => task.id === id)) {
     return res.status(400).json({ messgae: `No task with ${id} not found!` });
   }
