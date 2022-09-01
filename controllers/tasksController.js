@@ -1,4 +1,5 @@
 const fsPromises = require("fs/promises");
+const { nanoid } = require("nanoid");
 const path = require("path");
 const tasksDB = {
   tasks: require("../model/tasks.json"),
@@ -31,4 +32,24 @@ const addTask = (req, res) => {
     }
 };
 
-
+const updateTask = (req, res) => {
+    const id = (req.body.id)
+    if (!id) {
+        return res.status(400).json({messgae: `No task with ${id} not found!`})
+    }
+    try {
+        const newTasks = tasksDB.tasks.map(task => {
+            if (task.id === id) {
+                const updatedTask = {...task, ...req.body}
+                return updatedTask;
+            } else {return task}
+        })
+        tasksDB.setTasks(newTasks);
+        const updatedTask = newTasks.find(task => task.id === id)
+        await fsPromises.appendFile(path.join(__dirname, "..", "model", "tasks.json"), JSON.stringify(tasksDB.tasks))
+        res.status(200).json({message: "Task succesfully updated", updatedTask})
+        console.log(updateTask)
+    } catch (error) {
+         res.status(500).json({ message: error.message });
+    }
+}
