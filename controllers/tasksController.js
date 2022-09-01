@@ -19,6 +19,14 @@ const addTask = async (req, res) => {
       message: "title, assignee, duedate and difficulty are required!",
     });
   }
+  // check for duplicates
+  if (
+    tasksDB.tasks.find(
+      (task) => task.title.toLowerCase() === title.toLowerCase()
+    )
+  ) {
+    return res.sendStatus(409); // duplicate
+  }
   // we can go ahead and create the task then
   const newTask = { id: uuid(), title, assignee, dueDate, difficulty };
   tasksDB.setTasks([...tasksDB.tasks, newTask]);
