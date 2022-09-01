@@ -55,7 +55,7 @@ const updateTask = (req, res) => {
 }
 
 const deleteTask = (req, res) => {
- const id = (req.body.id)
+    const id = (req.body.id);
     if (!id || tasksDB.tasks.find(task => task.id === id)) {
         return res.status(400).json({messgae: `No task with ${id} not found!`})
     }
