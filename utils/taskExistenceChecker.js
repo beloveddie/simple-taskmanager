@@ -5,3 +5,5 @@ const exists = (id, database) => {
     return false;
   }
 };
+
+module.exports = { exists };
