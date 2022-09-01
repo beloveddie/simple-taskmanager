@@ -70,7 +70,7 @@ const deleteTask = async (req, res) => {
   try {
     const newTasks = tasksDB.tasks.filter((task) => task.id !== id);
     tasksDB.setTasks(newTasks);
-    await fsPromises.appendFile(
+    await fsPromises.writeFile(
       path.join(__dirname, "..", "model", "tasks.json"),
       JSON.stringify(tasksDB.tasks)
     );
