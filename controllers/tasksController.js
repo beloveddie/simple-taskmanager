@@ -22,7 +22,13 @@ const addTask = (req, res) => {
   const newTask = {id: nanoid(), title, assignee, dueDate, difficulty };
   tasksDB.setTasks([...tasksDB.tasks, newTask]);
   // lets play bit with the filesystem ..yoh!
-    await fsPromises.writeFile(path.join(__dirname, "..", "model", "tasks.json"), JSON.stringify(tasksDB.tasks))
+    try {
+        await fsPromises.writeFile(path.join(__dirname, "..", "model", "tasks.json"), JSON.stringify(tasksDB.tasks))
+        console.log(tasksDB.tasks)
+        res.status(201).json({"success": "Task successfully added!"})
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
 
 
