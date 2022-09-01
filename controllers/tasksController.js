@@ -81,4 +81,4 @@ const getTaskById = (req, res) => {
     console.log(task);
 }
 
-module.exports = {getAllTasks, addTask, updateTask, getTaskById}
+module.exports = {getAllTasks, addTask, updateTask, deleteTask, getTaskById}
